@@ -33,7 +33,7 @@ const LoginPage = () => {
       toast.success("Logado com Sucesso !");
       console.log(user);
 
-      // navigate("/choice", { replace: true });
+      navigate("/choice", { replace: true });
     }
 
     if (error) {
