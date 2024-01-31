@@ -26,14 +26,11 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (user) {
-      user.user.getIdTokenResult().then((data) => {
-        window.localStorage.setItem("@acessToken", data.token);
-      });
       window.localStorage.setItem("@idUser", user.user.uid);
+      window.localStorage.setItem("@emailUser", user.user.email!);
       toast.success("Logado com Sucesso !");
-      console.log(user);
 
-      navigate("/choice", { replace: true });
+      navigate("/cupom", { replace: true });
     }
 
     if (error) {
@@ -65,7 +62,6 @@ const LoginPage = () => {
             type="email"
             placeholder="E-mail"
             {...register("email")}
-            // onChange={(e) => setEmail(e.target.value)}
           />
           {errors.email && <span>{errors.email.message}</span>}
           <input
@@ -73,7 +69,6 @@ const LoginPage = () => {
             type="password"
             placeholder="Senha"
             {...register("password")}
-            // onChange={(e) => setPassword(e.target.value)}
           />
           {errors.password && <span>{errors.password.message}</span>}
           <button type="submit">Entrar</button>

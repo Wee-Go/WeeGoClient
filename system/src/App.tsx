@@ -2,6 +2,7 @@ import { ToastContainer } from "react-toastify";
 import "./App.css";
 import MainRoutes from "./routes";
 import "react-toastify/dist/ReactToastify.css";
+import AuthProvider from "./contexts/UserContext";
 
 function App() {
   return (
@@ -17,8 +18,9 @@ function App() {
         draggable
         pauseOnHover
       />
-
-      <MainRoutes />
+      <AuthProvider>
+        <MainRoutes />
+      </AuthProvider>
     </>
   );
 }
