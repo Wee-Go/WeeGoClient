@@ -6,6 +6,8 @@ import { useUploadFile } from "react-firebase-hooks/storage";
 import { useSignOut } from "react-firebase-hooks/auth";
 import { toast } from "react-toastify";
 import { collection, doc, setDoc } from "firebase/firestore";
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/UserContext";
 
 const CupomPage = () => {
   const [uploadFile, uploading, snapshot, error] = useUploadFile();
@@ -14,6 +16,7 @@ const CupomPage = () => {
 
   const idUser = localStorage.getItem("@idUser");
   const emailUser = localStorage.getItem("@emailUser");
+  const { user } = useContext(AuthContext);
 
   async function logOut() {
     const sucess = await signOut();
@@ -26,7 +29,7 @@ const CupomPage = () => {
 
   async function upload(event: any) {
     event.preventDefault();
-    const file = event.target[2].files[0];
+    const file = event.target[3].files[0];
 
     const regex = /([^@]+)/;
     const match = emailUser!.match(regex);
@@ -54,13 +57,28 @@ const CupomPage = () => {
       if (result) {
         const imgUrl = await getDownloadURL(result.ref);
         const data = {
-          desconto: event.target[1].value,
           descricao: event.target[0].value,
+          desconto: event.target[1].value,
+          tipoDesconto: event.target[2].value,
           imgUrl,
+          user: user?.uid,
         };
-        const firestoreRef = collection(db, "ShoppingTijuca", "lojas", "lojas");
 
-        await setDoc(doc(firestoreRef), data);
+        const firestoreRef = collection(
+          db,
+          "ShoppingTijuca",
+          "lojas",
+          "lojas",
+          `${user?.uid}`,
+          "cupom"
+        );
+
+        try {
+          await setDoc(doc(firestoreRef), data);
+          toast.success("Cupom adicionado com Sucesso!");
+        } catch (error) {
+          console.log(error);
+        }
 
         // const cityRef = doc(db, "ShoppingTijuca", "lojas");
         // setDoc(cityRef, { capital: true }, { merge: true });
@@ -87,6 +105,11 @@ const CupomPage = () => {
 
           <label htmlFor="descont">Escreva o valor do desconto</label>
           <input type="number" id="descont" />
+
+          <select name="typeDescont" id="typeDescont">
+            <option value="$">$</option>
+            <option value="%">%</option>
+          </select>
 
           <label htmlFor="banner_pic">Faça upload da imagem de banner</label>
           <input type="file" id="banner_pic" accept=".jpg, .jpeg, .png" />
