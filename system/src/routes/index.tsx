@@ -1,7 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 import LoginPage from "../pages/login";
-import ChoicePage from "../pages/choice";
-import CupomPage from "../pages/cupom";
+import DashboardPage from "../pages/dashboard";
+import StoriePage from "../pages/storie";
+import SquarePage from "../pages/square";
 
 const MainRoutes = () => {
   return (
@@ -9,8 +10,9 @@ const MainRoutes = () => {
       <Route path="*" element={<LoginPage />} />
       <Route path="/client" element={<LoginPage />} />
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/choice" element={<ChoicePage />} />
-      <Route path="/cupom" element={<CupomPage />} />
+      <Route path="/dashboard" element={<DashboardPage />} />
+      <Route path="/storie" element={<StoriePage />} />
+      <Route path="/square" element={<SquarePage />} />
     </Routes>
   );
 };

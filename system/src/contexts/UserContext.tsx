@@ -20,16 +20,14 @@ function AuthProvider({ children }: iUserProviderProps) {
 
   useEffect(() => {
     if (!loading) {
-      if (user) {
-        navigate("/cupom");
-      } else {
+      if (!user) {
         navigate("/login");
       }
       if (error) {
         console.log(error);
       }
     }
-  }, [loading]);
+  }, [user, loading]);
 
   return (
     <AuthContext.Provider

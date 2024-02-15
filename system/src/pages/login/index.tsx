@@ -7,8 +7,9 @@ import { toast } from "react-toastify";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../contexts/UserContext";
 
 export interface iRegisterUserProps {
   email: string;
@@ -16,28 +17,38 @@ export interface iRegisterUserProps {
 }
 
 const LoginPage = () => {
-  const [signInWithEmailAndPassword, user, loading, error] =
+  const [signInWithEmailAndPassword, userLogin, loading, error] =
     useSignInWithEmailAndPassword(auth);
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard");
+    }
+    if (error) {
+      console.log(error);
+    }
+  }, [user]);
 
   function handleLogin({ email, password }: any) {
     signInWithEmailAndPassword(email, password);
   }
 
   useEffect(() => {
-    if (user) {
-      window.localStorage.setItem("@idUser", user.user.uid);
-      window.localStorage.setItem("@emailUser", user.user.email!);
+    if (userLogin) {
+      window.localStorage.setItem("@idUser", userLogin.user.uid);
+      window.localStorage.setItem("@emailUser", userLogin.user.email!);
       toast.success("Logado com Sucesso !");
 
-      navigate("/cupom", { replace: true });
+      navigate("/dashboard", { replace: true });
     }
 
     if (error) {
       console.log(error);
       toast.error("Email ou Senha Inválidos");
     }
-  }, [user, error, navigate]);
+  }, [userLogin, error]);
 
   const formSchema = yup.object().shape({
     email: yup.string().required("Email obrigatório"),
