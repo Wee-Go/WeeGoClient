@@ -15,7 +15,7 @@ import Home from "../../assets/Home.png";
 import Phone from "../../assets/PhoneIcon.png";
 import Mail from "../../assets/MailIcon.png";
 import Notification from "../../assets/Notification.png";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSignOut } from "react-firebase-hooks/auth";
@@ -33,6 +33,9 @@ const DashboardPage = () => {
   const [LogoShow, setLogoShow] = useState(true);
   const [SquareeShow, setSquareeShow] = useState(false);
   const [NameLoja, setNameLoja] = useState("");
+  const [ClassButtonLogo, setClassButtonLogo] = useState("onFocus");
+  const [ClassButtonSquare, setClassButtonSquare] = useState("");
+  const [ClassButtonStorie, setClassButtonStorie] = useState("");
 
   const { user } = useContext(AuthContext);
 
@@ -67,16 +70,25 @@ const DashboardPage = () => {
     setStorieShow(true);
     setLogoShow(false);
     setSquareeShow(false);
+    setClassButtonLogo("");
+    setClassButtonSquare("");
+    setClassButtonStorie("onFocus");
   }
   function showLogo() {
     setStorieShow(false);
     setLogoShow(true);
     setSquareeShow(false);
+    setClassButtonLogo("onFocus");
+    setClassButtonSquare("");
+    setClassButtonStorie("");
   }
   function showSquare() {
     setStorieShow(false);
     setLogoShow(false);
     setSquareeShow(true);
+    setClassButtonLogo("");
+    setClassButtonSquare("onFocus");
+    setClassButtonStorie("");
   }
 
   return (
@@ -115,9 +127,15 @@ const DashboardPage = () => {
         </DivWeego>
         <ContentContainer>
           <DivOptions>
-            <button onClick={showLogo}>Imagem logo</button>
-            <button onClick={showSquare}>Square Balão</button>
-            <button onClick={showStorie}>Stories</button>
+            <button className={ClassButtonLogo} onClick={showLogo}>
+              Imagem logo
+            </button>
+            <button className={ClassButtonSquare} onClick={showSquare}>
+              Square Balão
+            </button>
+            <button className={ClassButtonStorie} onClick={showStorie}>
+              Stories
+            </button>
           </DivOptions>
           {StorieShow && <StorieUpload />}
           {LogoShow && <LogoUpload />}

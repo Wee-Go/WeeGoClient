@@ -116,12 +116,14 @@ export const DivWeego = styled.div`
 
 export const ContentContainer = styled.main`
   width: 100%;
-  height: 60%;
+  min-height: 60%;
+  max-height: 4000px;
   box-shadow: 0px 4px 4px 0px #00000040;
   background-color: #ffffff;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
+  overflow: auto;
 `;
 
 export const DivOptions = styled.div`
@@ -141,11 +143,16 @@ export const DivOptions = styled.div`
     font-size: 0.75rem;
     font-weight: 600;
     color: #3d3d3d;
+    transition: 1s;
   }
-
-  > button:focus {
+  > button:hover {
+    background-color: #3e1077;
+    color: #f2f2f2;
+  }
+  .onFocus {
     background-color: #8b38ff;
     color: #ffffff;
+    transition: 1s;
   }
 `;
 
