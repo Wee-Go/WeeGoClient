@@ -32,6 +32,7 @@ export const LateralMenu = styled.div`
   > div > img {
     object-fit: cover;
     width: 50%;
+    cursor: pointer;
   }
   > #home {
     border: none;
@@ -93,6 +94,7 @@ export const DivWeego = styled.div`
   padding-left: 9%;
   padding-top: 4%;
   border-radius: 10px;
+  position: relative;
   > img {
     width: 15%;
     object-fit: cover;
@@ -111,6 +113,22 @@ export const DivWeego = styled.div`
     > p {
       font-size: 0.75rem;
     }
+  }
+  > h5 {
+    position: absolute;
+    right: 30px;
+    top: 20px;
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.7rem 1rem;
+    background-color: #7d0df8;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: 1s;
+  }
+  > h5:hover {
+    transform: scale(1.05);
   }
 `;
 

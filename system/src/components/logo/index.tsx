@@ -6,9 +6,7 @@ import { toast } from "react-toastify";
 import { doc, updateDoc } from "firebase/firestore";
 import { useContext } from "react";
 import { AuthContext } from "../../contexts/UserContext";
-
 import React, { useState, useRef } from "react";
-
 import ReactCrop, {
   centerCrop,
   makeAspectCrop,
@@ -17,7 +15,6 @@ import ReactCrop, {
 } from "react-image-crop";
 import { canvasPreview } from "../Crop/canvasPreview";
 import { useDebounceEffect } from "../Crop/useDebounceEffect";
-
 import "react-image-crop/dist/ReactCrop.css";
 
 function centerAspectCrop(

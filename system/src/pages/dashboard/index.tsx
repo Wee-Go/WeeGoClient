@@ -15,7 +15,7 @@ import Home from "../../assets/Home.png";
 import Phone from "../../assets/PhoneIcon.png";
 import Mail from "../../assets/MailIcon.png";
 import Notification from "../../assets/Notification.png";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSignOut } from "react-firebase-hooks/auth";
@@ -25,6 +25,7 @@ import SquareUpload from "../../components/square";
 import LogoUpload from "../../components/logo";
 import { AuthContext } from "../../contexts/UserContext";
 import { collection, getDocs, query, where } from "firebase/firestore";
+import Plans from "../../components/plans";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
@@ -36,6 +37,7 @@ const DashboardPage = () => {
   const [ClassButtonLogo, setClassButtonLogo] = useState("onFocus");
   const [ClassButtonSquare, setClassButtonSquare] = useState("");
   const [ClassButtonStorie, setClassButtonStorie] = useState("");
+  const [planShow, setplanShow] = useState(false);
 
   const { user } = useContext(AuthContext);
 
@@ -91,6 +93,16 @@ const DashboardPage = () => {
     setClassButtonStorie("");
   }
 
+  function showPlans() {
+    setClassButtonLogo(`hidden`);
+    setClassButtonSquare(`hidden`);
+    setClassButtonStorie(`hidden`);
+    setLogoShow(false);
+    setSquareeShow(false);
+    setStorieShow(false);
+    setplanShow(true);
+  }
+
   return (
     <Container>
       <LateralMenu>
@@ -101,7 +113,7 @@ const DashboardPage = () => {
           <img src={LogoLojaMenu} alt="LogoLojaMenu" />
         </div>
         <div id="home">
-          <img src={Home} alt="Home" />
+          <img src={Home} alt="Home" onClick={() => window.location.reload()} />
         </div>
         <button onClick={logOut}>Log out</button>
       </LateralMenu>
@@ -124,6 +136,7 @@ const DashboardPage = () => {
             <img src={Mail} alt="" />
             <p>email@weego.com</p>
           </div>
+          <h5 onClick={showPlans}>Conheça nossos planos</h5>
         </DivWeego>
         <ContentContainer>
           <DivOptions>
@@ -140,6 +153,7 @@ const DashboardPage = () => {
           {StorieShow && <StorieUpload />}
           {LogoShow && <LogoUpload />}
           {SquareeShow && <SquareUpload />}
+          {planShow && <Plans />}
         </ContentContainer>
       </PageContainer>
 

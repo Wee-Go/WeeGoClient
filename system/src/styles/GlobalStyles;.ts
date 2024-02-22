@@ -65,6 +65,9 @@ main{
 #root{
   height: 100%;
 }
+.hidden{
+	display: none;
+}
 
 
 
