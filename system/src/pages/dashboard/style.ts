@@ -33,9 +33,16 @@ export const LateralMenu = styled.div`
     object-fit: cover;
     width: 50%;
     cursor: pointer;
+    transition: 0.5s;
   }
+
   > #home {
     border: none;
+    transition: 0.5s;
+  }
+
+  > #home:hover {
+    transform: scale(1.2);
   }
 `;
 

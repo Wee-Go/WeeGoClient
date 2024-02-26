@@ -31,10 +31,11 @@ const DashboardPage = () => {
   const navigate = useNavigate();
   const [signOut, loading, errors] = useSignOut(auth);
   const [StorieShow, setStorieShow] = useState(false);
-  const [LogoShow, setLogoShow] = useState(true);
+  const [LogoShow, setLogoShow] = useState(false);
   const [SquareeShow, setSquareeShow] = useState(false);
   const [NameLoja, setNameLoja] = useState("");
-  const [ClassButtonLogo, setClassButtonLogo] = useState("onFocus");
+  const [PlanLoja, setPlanLoja] = useState("");
+  const [ClassButtonLogo, setClassButtonLogo] = useState("");
   const [ClassButtonSquare, setClassButtonSquare] = useState("");
   const [ClassButtonStorie, setClassButtonStorie] = useState("");
   const [planShow, setplanShow] = useState(false);
@@ -57,7 +58,24 @@ const DashboardPage = () => {
         setNameLoja(loja[0].nomeLoja);
       } catch (error) {}
     }
+
+    async function getPlan() {
+      //Métdo para pegar o tipo de plano da loja
+      const lojaref = collection(db, "ShoppingTijuca", "lojas", "lojas");
+      const q = query(lojaref, where("user", "==", `${user?.uid}`));
+
+      try {
+        let loja: Array<any> = [];
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          loja.push(data);
+        });
+        setPlanLoja(loja[0].tipoPlano);
+      } catch (error) {}
+    }
     getName();
+    getPlan();
   });
 
   async function logOut() {
@@ -140,20 +158,41 @@ const DashboardPage = () => {
         </DivWeego>
         <ContentContainer>
           <DivOptions>
-            <button className={ClassButtonLogo} onClick={showLogo}>
-              Imagem logo
-            </button>
-            <button className={ClassButtonSquare} onClick={showSquare}>
-              Square Balão
-            </button>
-            <button className={ClassButtonStorie} onClick={showStorie}>
-              Stories
-            </button>
+            {PlanLoja === "silver" && (
+              <button className={ClassButtonStorie} onClick={showStorie}>
+                Stories
+              </button>
+            )}
+
+            {PlanLoja === "gold" && (
+              <>
+                <button className={ClassButtonLogo} onClick={showLogo}>
+                  Imagem logo
+                </button>
+                <button className={ClassButtonSquare} onClick={showSquare}>
+                  Square Balão
+                </button>
+              </>
+            )}
+
+            {PlanLoja === "platinum" && (
+              <>
+                <button className={ClassButtonLogo} onClick={showLogo}>
+                  Imagem logo
+                </button>
+                <button className={ClassButtonSquare} onClick={showSquare}>
+                  Square Balão
+                </button>
+                <button className={ClassButtonStorie} onClick={showStorie}>
+                  Stories
+                </button>
+              </>
+            )}
           </DivOptions>
           {StorieShow && <StorieUpload />}
           {LogoShow && <LogoUpload />}
           {SquareeShow && <SquareUpload />}
-          {planShow && <Plans />}
+          {planShow && <Plans planLoja={PlanLoja} />}
         </ContentContainer>
       </PageContainer>
 

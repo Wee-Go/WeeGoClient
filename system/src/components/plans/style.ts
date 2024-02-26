@@ -76,6 +76,10 @@ export const SilverCard = styled.div`
     border-radius: 50px;
     padding: 0.7rem 1.5rem;
     cursor: pointer;
+    transition: 0.5s;
+  }
+  > span:hover {
+    transform: scale(1.05);
   }
 `;
 export const GoldCard = styled.div`
@@ -125,6 +129,10 @@ export const GoldCard = styled.div`
     border-radius: 50px;
     padding: 0.7rem 1.5rem;
     cursor: pointer;
+    transition: 0.5s;
+  }
+  > span:hover {
+    transform: scale(1.05);
   }
 `;
 export const PlatinumCard = styled.div`
@@ -175,5 +183,9 @@ export const PlatinumCard = styled.div`
     border-radius: 50px;
     padding: 0.7rem 1.5rem;
     cursor: pointer;
+    transition: 0.5s;
+  }
+  > span:hover {
+    transform: scale(1.05);
   }
 `;
