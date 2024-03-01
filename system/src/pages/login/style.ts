@@ -80,5 +80,6 @@ export const FormContainer = styled.form`
   > span {
     color: red;
     font-size: 0.7rem;
+    font-weight: 600;
   }
 `;

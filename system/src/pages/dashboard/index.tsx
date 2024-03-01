@@ -23,8 +23,15 @@ import { auth, db } from "../../services/firebaseConfig";
 import StorieUpload from "../../components/storie";
 import SquareUpload from "../../components/square";
 import LogoUpload from "../../components/logo";
+import ModalUpdatePass from "../../components/modalUpdatePass";
 import { AuthContext } from "../../contexts/UserContext";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import Plans from "../../components/plans";
 
 const DashboardPage = () => {
@@ -39,44 +46,103 @@ const DashboardPage = () => {
   const [ClassButtonSquare, setClassButtonSquare] = useState("");
   const [ClassButtonStorie, setClassButtonStorie] = useState("");
   const [planShow, setplanShow] = useState(false);
-
+  const [modalPassword, setModalPassword] = useState(false);
+  const [stories, setStories] = useState<Story[]>([]);
+  const [squares, setSquares] = useState<Square[]>([]);
   const { user } = useContext(AuthContext);
 
+  interface Story {
+    estaAtivo: boolean;
+    imgUrl: string;
+    nomeLoja: string;
+    user: string;
+  }
+  interface Square {
+    estaAtivo: boolean;
+    imgUrl: string;
+    nomeLoja: string;
+    user: string;
+  }
+
   useEffect(() => {
-    async function getName() {
-      //Métdo para pegar o nome da loja
-      const lojaref = collection(db, "ShoppingTijuca", "lojas", "lojas");
-      const q = query(lojaref, where("user", "==", `${user?.uid}`));
+    const fetchData = async () => {
+      await getStories();
+      await getSquares();
+    };
 
-      try {
-        let loja: Array<any> = [];
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          loja.push(data);
-        });
-        setNameLoja(loja[0].nomeLoja);
-      } catch (error) {}
+    fetchData();
+  }, [user]);
+  getName();
+  getPlan();
+
+  async function getName() {
+    //Métdo para pegar o nome da loja
+    const lojaref = collection(db, "ShoppingTijuca", "lojas", "lojas");
+    const q = query(lojaref, where("user", "==", `${user?.uid}`));
+    let loja: Array<any> = [];
+    try {
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        loja.push(data);
+      });
+      setNameLoja(loja[0].nomeLoja);
+    } catch (error) {
+      console.log(error);
     }
+  }
 
-    async function getPlan() {
-      //Métdo para pegar o tipo de plano da loja
-      const lojaref = collection(db, "ShoppingTijuca", "lojas", "lojas");
-      const q = query(lojaref, where("user", "==", `${user?.uid}`));
+  async function getStories() {
+    const storiesaref = collection(
+      db,
+      "ShoppingTijuca",
+      "lojas",
+      `lojas/${user?.uid}/storie`
+    );
+    const qstorie = query(storiesaref, where("user", "==", `${user?.uid}`));
+    const stories = onSnapshot(qstorie, (querySnapshot: any) => {
+      let storiesData: Story[] = [];
+      querySnapshot.forEach((doc: any) => {
+        const data = doc.data() as Story;
+        storiesData.push(data);
+      });
+      setStories(storiesData);
+    });
+  }
 
-      try {
-        let loja: Array<any> = [];
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          loja.push(data);
-        });
-        setPlanLoja(loja[0].tipoPlano);
-      } catch (error) {}
-    }
-    getName();
-    getPlan();
-  });
+  async function getSquares() {
+    const squareref = collection(
+      db,
+      "ShoppingTijuca",
+      "lojas",
+      `lojas/${user?.uid}/square`
+    );
+    const qsquare = query(squareref, where("user", "==", `${user?.uid}`));
+    const squares = onSnapshot(qsquare, (querySnapshot: any) => {
+      let squareData: Square[] = [];
+      querySnapshot.forEach((doc: any) => {
+        const data = doc.data() as Square;
+        squareData.push(data);
+      });
+      setSquares(squareData);
+    });
+  }
+
+  async function getPlan() {
+    //Métdo para pegar o tipo de plano da loja
+    const lojaref = collection(db, "ShoppingTijuca", "lojas", "lojas");
+    const q = query(lojaref, where("user", "==", `${user?.uid}`));
+
+    try {
+      let loja: Array<any> = [];
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        loja.push(data);
+      });
+      setPlanLoja(loja[0].tipoPlano);
+    } catch (error) {}
+  }
 
   async function logOut() {
     const sucess = await signOut();
@@ -121,6 +187,14 @@ const DashboardPage = () => {
     setplanShow(true);
   }
 
+  function showModalPassword() {
+    setModalPassword(true);
+  }
+
+  function closeModalPassword() {
+    setModalPassword(false);
+  }
+
   return (
     <Container>
       <LateralMenu>
@@ -138,6 +212,7 @@ const DashboardPage = () => {
       <MenuHeader>
         <h1>Home</h1>
         <div>
+          <button onClick={showModalPassword}>Mudar Senha</button>
           <img src={Notification} alt="" />
           {NameLoja && <p>{NameLoja} </p>}
         </div>
@@ -159,9 +234,14 @@ const DashboardPage = () => {
         <ContentContainer>
           <DivOptions>
             {PlanLoja === "silver" && (
-              <button className={ClassButtonStorie} onClick={showStorie}>
-                Stories
-              </button>
+              <>
+                <button className={ClassButtonLogo} onClick={showLogo}>
+                  Imagem logo
+                </button>
+                <button className={ClassButtonStorie} onClick={showStorie}>
+                  Stories
+                </button>
+              </>
             )}
 
             {PlanLoja === "gold" && (
@@ -188,6 +268,17 @@ const DashboardPage = () => {
                 </button>
               </>
             )}
+
+            {PlanLoja === "shop" && (
+              <>
+                <button className={ClassButtonLogo} onClick={showLogo}>
+                  Imagem logo
+                </button>
+                <button className={ClassButtonStorie} onClick={showStorie}>
+                  Stories
+                </button>
+              </>
+            )}
           </DivOptions>
           {StorieShow && <StorieUpload />}
           {LogoShow && <LogoUpload />}
@@ -204,6 +295,9 @@ const DashboardPage = () => {
         <p>Termos de Uso</p>
         <p>Contato</p>
       </FooterContainer>
+      {modalPassword && (
+        <ModalUpdatePass closeModalPassword={closeModalPassword} />
+      )}
     </Container>
   );
 };

@@ -45,7 +45,7 @@ const LogoUpload = () => {
   const imgRef = useRef<HTMLImageElement>(null);
   const [crop, setCrop] = useState<Crop>();
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
-  const [aspect, setAspect] = useState<number | undefined>(9 / 16);
+  const [aspect, setAspect] = useState<number | undefined>(1 / 1);
 
   const idUser = localStorage.getItem("@idUser");
   const emailUser = localStorage.getItem("@emailUser");
@@ -218,10 +218,10 @@ const LogoUpload = () => {
               onChange={(_, percentCrop) => setCrop(percentCrop)}
               onComplete={(c) => setCompletedCrop(c)}
               aspect={aspect}
-              maxWidth={200}
-              maxHeight={350}
-              minWidth={171}
-              minHeight={234}
+              maxWidth={300}
+              maxHeight={300}
+              minWidth={250}
+              minHeight={250}
             >
               <img
                 ref={imgRef}
