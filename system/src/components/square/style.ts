@@ -57,3 +57,9 @@ export const CropContainer = styled.div`
     object-fit: contain;
   }
 `;
+
+export const ListSquares = styled.ul`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`;

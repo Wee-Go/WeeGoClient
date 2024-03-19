@@ -40,7 +40,7 @@ const DashboardPage = () => {
   const [StorieShow, setStorieShow] = useState(false);
   const [LogoShow, setLogoShow] = useState(false);
   const [SquareeShow, setSquareeShow] = useState(false);
-  const [NameLoja, setNameLoja] = useState("");
+
   const [PlanLoja, setPlanLoja] = useState("");
   const [ClassButtonLogo, setClassButtonLogo] = useState("");
   const [ClassButtonSquare, setClassButtonSquare] = useState("");
@@ -49,7 +49,7 @@ const DashboardPage = () => {
   const [modalPassword, setModalPassword] = useState(false);
   const [stories, setStories] = useState<Story[]>([]);
   const [squares, setSquares] = useState<Square[]>([]);
-  const { user } = useContext(AuthContext);
+  const { user, NameLoja } = useContext(AuthContext);
 
   interface Story {
     estaAtivo: boolean;
@@ -72,32 +72,14 @@ const DashboardPage = () => {
 
     fetchData();
   }, [user]);
-  getName();
   getPlan();
-
-  async function getName() {
-    //Métdo para pegar o nome da loja
-    const lojaref = collection(db, "ShoppingTijuca", "lojas", "lojas");
-    const q = query(lojaref, where("user", "==", `${user?.uid}`));
-    let loja: Array<any> = [];
-    try {
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        loja.push(data);
-      });
-      setNameLoja(loja[0].nomeLoja);
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   async function getStories() {
     const storiesaref = collection(
       db,
       "ShoppingTijuca",
       "lojas",
-      `lojas/${user?.uid}/storie`
+      `lojas/${user?.uid}/stories`
     );
     const qstorie = query(storiesaref, where("user", "==", `${user?.uid}`));
     const stories = onSnapshot(qstorie, (querySnapshot: any) => {
@@ -115,7 +97,7 @@ const DashboardPage = () => {
       db,
       "ShoppingTijuca",
       "lojas",
-      `lojas/${user?.uid}/square`
+      `lojas/${user?.uid}/squares`
     );
     const qsquare = query(squareref, where("user", "==", `${user?.uid}`));
     const squares = onSnapshot(qsquare, (querySnapshot: any) => {
@@ -280,9 +262,9 @@ const DashboardPage = () => {
               </>
             )}
           </DivOptions>
-          {StorieShow && <StorieUpload />}
+          {StorieShow && <StorieUpload stories={stories} />}
           {LogoShow && <LogoUpload />}
-          {SquareeShow && <SquareUpload />}
+          {SquareeShow && <SquareUpload squares={squares} />}
           {planShow && <Plans planLoja={PlanLoja} />}
         </ContentContainer>
       </PageContainer>

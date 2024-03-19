@@ -57,3 +57,8 @@ export const CropContainer = styled.div`
     object-fit: contain;
   }
 `;
+export const ListStories = styled.ul`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`;
