@@ -143,7 +143,11 @@ const StorieUpload = ({ stories }: any) => {
       </FormContainer>
       <ListStories>
         {stories?.map((stories: any) => (
-          <CardStorieSquare key={stories.imgUrl} card={stories} />
+          <CardStorieSquare
+            key={stories.imgUrl}
+            card={stories}
+            doc={"stories"}
+          />
         ))}
       </ListStories>
     </>

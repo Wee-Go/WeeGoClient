@@ -10,7 +10,7 @@ import {
 import { db } from "../../services/firebaseConfig";
 import { AuthContext } from "../../contexts/UserContext";
 
-const CardStorieSquare = ({ card }: any) => {
+const CardStorieSquare = ({ card, doc }: any) => {
   const { user } = useContext(AuthContext);
 
   async function toggleStatus() {
@@ -20,7 +20,7 @@ const CardStorieSquare = ({ card }: any) => {
         db,
         "ShoppingTijuca",
         "lojas",
-        `lojas/${user?.uid}/stories`
+        `lojas/${user?.uid}/${doc}`
       );
       const q = query(storiesRef, where("imgUrl", "==", card.imgUrl));
       const querySnapshot = await getDocs(q);

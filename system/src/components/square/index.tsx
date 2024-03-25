@@ -146,7 +146,11 @@ const SquareUpload = ({ squares }: any) => {
       </FormContainer>
       <ListSquares>
         {squares?.map((squares: any) => (
-          <CardStorieSquare key={squares.imgUrl} card={squares} />
+          <CardStorieSquare
+            key={squares.imgUrl}
+            card={squares}
+            doc={"squares"}
+          />
         ))}
       </ListSquares>
     </>
